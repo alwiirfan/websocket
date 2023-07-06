@@ -31,18 +31,18 @@ func (repository *repository) CreateUser(ctx context.Context, user *User) (*User
 	}
 
 	user.ID = int64(lastInsertId)
-	return user, err
+	return user, nil
 
 }
 
 func (repository *repository) GetUserByEmail(ctx context.Context, email string) (*User, error) {
 	user := User{}
 
-	query := "SELECT id, username, email, password FROM users WHERE email = $1"
-	err := repository.DB.QueryRowContext(ctx, query, email).Scan(&user.ID, &user.Username, &user.Email, &user.Password)
+	query := "SELECT id, email, username, password FROM users WHERE email = $1"
+	err := repository.DB.QueryRowContext(ctx, query, email).Scan(&user.ID, &user.Email, &user.Username, &user.Password)
 	if err != nil {
 		return &User{}, nil
 	}
 
-	return &user, err
+	return &user, nil
 }
