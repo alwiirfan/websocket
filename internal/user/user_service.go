@@ -20,8 +20,8 @@ type service struct {
 
 func NewService(repository Repository) Service {
 	return &service{
-		Repository: repository,
-		timeout:    time.Duration(2) * time.Second,
+		repository,
+		time.Duration(2) * time.Second,
 	}
 }
 
@@ -76,7 +76,7 @@ func (service *service) Login(ctx context.Context, request *LoginUserRequest) (*
 		return &LoginUserResponse{}, err
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodES256, &MyJWTClaims{
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, MyJWTClaims{
 		ID:       strconv.Itoa(int(usr.ID)),
 		Username: usr.Username,
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -90,5 +90,5 @@ func (service *service) Login(ctx context.Context, request *LoginUserRequest) (*
 		return &LoginUserResponse{}, err
 	}
 
-	return &LoginUserResponse{AccessToken: ss, ID: strconv.Itoa(int(usr.ID)), Username: usr.Username}, nil
+	return &LoginUserResponse{accessToken: ss, ID: strconv.Itoa(int(usr.ID)), Username: usr.Username}, nil
 }
