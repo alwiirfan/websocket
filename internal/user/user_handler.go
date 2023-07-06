@@ -20,13 +20,13 @@ func NewHandler(service Service) *Handler {
 func (handler *Handler) CreateUser(ctx *gin.Context) {
 	var request CreateUserRequest
 	if err := ctx.ShouldBindJSON(&request); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	res, err := handler.Service.CreateUser(ctx.Request.Context(), &request)
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -36,18 +36,18 @@ func (handler *Handler) CreateUser(ctx *gin.Context) {
 func (handler *Handler) Login(ctx *gin.Context) {
 	var user LoginUserRequest
 	if err := ctx.ShouldBindJSON(&user); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	usr, err := handler.Service.Login(ctx.Request.Context(), &user)
 	if err != nil {
 		fmt.Println("Error in login:", err)
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.SetCookie("jwt", usr.AccessToken, 3600, "/", "localhost", false, true)
+	ctx.SetCookie("jwt", usr.accessToken, 3600, "/", "localhost", false, true)
 
 	respon := &LoginUserResponse{
 		Username: usr.Username,
