@@ -19,6 +19,9 @@ func InitRoute(userHandler *user.Handler, websocketHandler *websocket.Handler) {
 
 	// websocket router
 	router.POST("/websocket/createRoom", websocketHandler.CreateRoom)
+	router.GET("/websocket/joinRoom/:roomId", websocketHandler.JoinRoom)
+	router.GET("/websocket/getRooms", websocketHandler.GetRooms)
+	router.GET("/websocket/getClients/:roomId", websocketHandler.GetClients)
 }
 
 func Start(addr string) error {
